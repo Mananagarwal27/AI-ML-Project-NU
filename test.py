@@ -3,7 +3,7 @@ import pandas as pd
 from typing import Sequence, Mapping, Optional
 import matplotlib.pyplot as plt
 
-
+# --- 1. Data Generation ---
 def generate_sales_data(
     start_date: str,
     end_date: str,
@@ -77,3 +77,16 @@ if __name__ == "__main__":
         plot_region_sales(df, "North", window=14)
     except Exception as e:
         print("Plot error:", e)
+
+TARGET_REGION = 'North'
+df_region = df[df['Region'] == TARGET_REGION].copy()
+
+df_prophet = df_region.rename(columns={'Date': 'ds', 'Sales': 'y'})[['ds', 'y']]
+
+FORECAST_PERIOD_DAYS = 30
+train_df = df_prophet[:-FORECAST_PERIOD_DAYS]
+test_df = df_prophet[-FORECAST_PERIOD_DAYS:]
+
+print(f"\nTarget Region Data Shape: {df_prophet.shape}")
+print(f"Train Data Shape: {train_df.shape}")
+print(f"Test Data Shape: {test_df.shape}")
